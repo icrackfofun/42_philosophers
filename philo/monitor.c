@@ -6,11 +6,20 @@
 /*   By: psantos- <psantos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 21:27:08 by psantos-          #+#    #+#             */
-/*   Updated: 2025/08/01 23:35:27 by psantos-         ###   ########.fr       */
+/*   Updated: 2025/08/02 00:12:52 by psantos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	precise_sleep(int duration_ms, t_shared *shared)
+{
+	int	start;
+
+	start = get_timestamp(shared);
+	while (get_timestamp(shared) - start < duration_ms)
+		usleep(100);
+}
 
 static void print_status(t_philo *philo, char *msg)
 {

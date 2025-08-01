@@ -6,7 +6,7 @@
 /*   By: psantos- <psantos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 17:27:35 by psantos-          #+#    #+#             */
-/*   Updated: 2025/08/01 23:34:27 by psantos-         ###   ########.fr       */
+/*   Updated: 2025/08/02 00:13:07 by psantos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,5 +69,6 @@ void	join_threads(t_philo *philos, int n);
 void	*monitor_routine(void *arg);
 int		check_philos(t_philo *philos, t_shared *shared);
 int		check_philo_status(t_philo *philo, t_shared *shared, int *all_ate);
+void	precise_sleep(int duration_ms, t_shared *shared);
 
 #endif

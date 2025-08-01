@@ -6,7 +6,7 @@
 /*   By: psantos- <psantos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 20:14:06 by psantos-          #+#    #+#             */
-/*   Updated: 2025/08/01 23:16:24 by psantos-         ###   ########.fr       */
+/*   Updated: 2025/08/02 00:12:50 by psantos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,24 @@ int	has_someone_died(t_shared *shared)
 	return (died);
 }
 
+static void pick_fork(t_philo *ph)
+{
+	if (ph->id % 2 == 0)
+	{
+		pthread_mutex_lock(ph->right_fork);
+		print_status(ph, "has taken a fork");
+		pthread_mutex_lock(ph->left_fork);
+		print_status(ph, "has taken a fork");
+	}
+	else
+	{
+		pthread_mutex_lock(ph->left_fork);
+		print_status(ph, "has taken a fork");
+		pthread_mutex_lock(ph->right_fork);
+		print_status(ph, "has taken a fork");
+	}
+}
+
 void	*philosopher_routine(void *arg)
 {
 	t_philo	*ph;
@@ -52,22 +70,19 @@ void	*philosopher_routine(void *arg)
 	while (!has_someone_died(ph->shared))
 	{
 		print_status(ph, "is thinking");
-		pthread_mutex_lock(ph->left_fork);
-		print_status(ph, "has taken a fork");
-		pthread_mutex_lock(ph->right_fork);
-		print_status(ph, "has taken a fork");
+		pick_fork(ph);
 		pthread_mutex_lock(&ph->shared->death_lock);
 		ph->last_meal_time = get_timestamp(ph->shared);
 		ph->meals_eaten++;
 		pthread_mutex_unlock(&ph->shared->death_lock);
 		print_status(ph, "is eating");
-		usleep(ph->shared->time_to_eat * 1000);
+		precise_sleep(ph->shared->time_to_sleep, ph->shared);
 		pthread_mutex_unlock(ph->right_fork);
 		pthread_mutex_unlock(ph->left_fork);
 		if (has_someone_died(ph->shared))
 			break;
 		print_status(ph, "is sleeping");
-		usleep(ph->shared->time_to_sleep * 1000);
+		precise_sleep(ph->shared->time_to_sleep, ph->shared);
 	}
 	return (NULL);
 }
