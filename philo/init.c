@@ -6,7 +6,7 @@
 /*   By: psantos- <psantos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 19:18:30 by psantos-          #+#    #+#             */
-/*   Updated: 2025/08/01 23:36:10 by psantos-         ###   ########.fr       */
+/*   Updated: 2025/08/06 15:01:56 by psantos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 int	init_shared(t_shared *shared)
 {
-	int	i;
+	int				i;
+	struct timeval	tv;
 
 	shared->forks = malloc(sizeof(pthread_mutex_t) * shared->n_philos);
 	if (!shared->forks)
@@ -30,8 +31,6 @@ int	init_shared(t_shared *shared)
 		return (0);
 	if (pthread_mutex_init(&shared->death_lock, NULL) != 0)
 		return (0);
-
-	struct timeval	tv;
 	gettimeofday(&tv, NULL);
 	shared->start_time = tv.tv_sec * 1000 + tv.tv_usec / 1000;
 	shared->someone_died = 0;
@@ -41,7 +40,7 @@ int	init_shared(t_shared *shared)
 void	init_philos(t_philo *philos, t_shared *shared)
 {
 	int	i;
-	int now;
+	int	now;
 
 	i = 0;
 	while (i < shared->n_philos)
@@ -57,5 +56,5 @@ void	init_philos(t_philo *philos, t_shared *shared)
 	now = get_timestamp(shared);
 	i = 0;
 	while (i < shared->n_philos)
-    	philos[i++].last_meal_time = now;
+		philos[i++].last_meal_time = now;
 }

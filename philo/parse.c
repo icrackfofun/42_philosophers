@@ -6,15 +6,15 @@
 /*   By: psantos- <psantos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 17:50:23 by psantos-          #+#    #+#             */
-/*   Updated: 2025/08/01 21:36:07 by psantos-         ###   ########.fr       */
+/*   Updated: 2025/08/06 15:05:14 by psantos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int is_positive(char *str)
+int	is_positive(char *str)
 {
-	int i;
+	int	i;
 
 	if (str == NULL || str[0] == '\0')
 		return (0);
@@ -28,10 +28,10 @@ int is_positive(char *str)
 	return (1);
 }
 
-int safe_atoi(const char *str, int *out)
+int	safe_atoi(const char *str, int *out)
 {
-	long result;
-	int i;
+	long	result;
+	int		i;
 
 	i = 0;
 	result = 0;
@@ -46,10 +46,10 @@ int safe_atoi(const char *str, int *out)
 	return (1);
 }
 
-int parse(t_shared *shared, char **av, int ac)
+int	parse(t_shared *shared, char **av, int ac)
 {
-	int i;
-	int tmp;
+	int	i;
+	int	tmp;
 
 	i = 1;
 	while (i < ac)
@@ -71,6 +71,6 @@ int parse(t_shared *shared, char **av, int ac)
 	if (ac == 5)
 		shared->must_eat_count = -1;
 	if (shared->n_philos <= 0)
-    	return (0);
+		return (0);
 	return (1);
 }
