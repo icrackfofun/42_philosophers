@@ -6,7 +6,7 @@
 /*   By: psantos- <psantos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 21:27:08 by psantos-          #+#    #+#             */
-/*   Updated: 2025/08/02 00:12:52 by psantos-         ###   ########.fr       */
+/*   Updated: 2025/08/05 21:51:22 by psantos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	precise_sleep(int duration_ms, t_shared *shared)
 
 	start = get_timestamp(shared);
 	while (get_timestamp(shared) - start < duration_ms)
-		usleep(100);
+		usleep(50);
 }
 
 static void print_status(t_philo *philo, char *msg)

@@ -6,7 +6,7 @@
 /*   By: psantos- <psantos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 20:14:06 by psantos-          #+#    #+#             */
-/*   Updated: 2025/08/02 00:12:50 by psantos-         ###   ########.fr       */
+/*   Updated: 2025/08/06 14:57:05 by psantos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,23 @@ int	has_someone_died(t_shared *shared)
 	return (died);
 }
 
-static void pick_fork(t_philo *ph)
+static int pick_fork(t_philo *ph)
 {
+	if (ph->shared->n_philos == 1)
+    {
+        pthread_mutex_lock(ph->left_fork);
+        print_status(ph, "has taken a fork");
+        precise_sleep(ph->shared->time_to_die + 1, ph->shared);
+        pthread_mutex_unlock(ph->left_fork);
+        return (0);
+    }
 	if (ph->id % 2 == 0)
 	{
 		pthread_mutex_lock(ph->right_fork);
 		print_status(ph, "has taken a fork");
 		pthread_mutex_lock(ph->left_fork);
 		print_status(ph, "has taken a fork");
+		return (1);
 	}
 	else
 	{
@@ -59,6 +68,7 @@ static void pick_fork(t_philo *ph)
 		print_status(ph, "has taken a fork");
 		pthread_mutex_lock(ph->right_fork);
 		print_status(ph, "has taken a fork");
+		return (1);
 	}
 }
 
@@ -70,15 +80,16 @@ void	*philosopher_routine(void *arg)
 	while (!has_someone_died(ph->shared))
 	{
 		print_status(ph, "is thinking");
-		pick_fork(ph);
+		if (pick_fork(ph) == 0)
+			return (NULL);
+		print_status(ph, "is eating");
+		precise_sleep(ph->shared->time_to_eat, ph->shared);
+		pthread_mutex_unlock(ph->right_fork);
+		pthread_mutex_unlock(ph->left_fork);
 		pthread_mutex_lock(&ph->shared->death_lock);
 		ph->last_meal_time = get_timestamp(ph->shared);
 		ph->meals_eaten++;
 		pthread_mutex_unlock(&ph->shared->death_lock);
-		print_status(ph, "is eating");
-		precise_sleep(ph->shared->time_to_sleep, ph->shared);
-		pthread_mutex_unlock(ph->right_fork);
-		pthread_mutex_unlock(ph->left_fork);
 		if (has_someone_died(ph->shared))
 			break;
 		print_status(ph, "is sleeping");
